@@ -102,8 +102,6 @@ abstract class AbstractEvent
                 unset($this->subscribers[$id]);
             }
         }
-
-        $this->subscribers = [];
     }
 
     /**
