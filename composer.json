@@ -1,0 +1,31 @@
+{
+  "name": "charcoal-dev/events",
+  "description": "Events base lib for Charcoal PHP Apps",
+  "type": "library",
+  "homepage": "https://github.com/charcoal-dev/events",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Furqan A. Siddiqui",
+      "email": "hello@furqansiddiqui.com",
+      "homepage": "https://www.furqansiddiqui.com",
+      "role": "Author"
+    }
+  ],
+  "require": {
+    "php": "^8.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Charcoal\\Events\\": [
+        "src"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Charcoal\\Events\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "dev"
+}
