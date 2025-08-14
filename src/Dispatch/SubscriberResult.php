@@ -27,4 +27,23 @@ readonly class SubscriberResult
     )
     {
     }
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            "subscription" => $this->subscription->id,
+            "status" => $this->status->name,
+            "result" => $this->result,
+            "error" => $this->error ? [
+                "exception" => get_class($this->error),
+                "message" => $this->error->getMessage(),
+                "code" => $this->error->getCode(),
+            ] : null,
+        ];
+    }
 }

@@ -20,12 +20,27 @@ use Charcoal\Events\Contracts\EventContextInterface;
 readonly class DispatchReport
 {
     use NotSerializableTrait;
-    
+
     public function __construct(
         public AbstractEvent         $event,
         public EventContextInterface $context,
         public array                 $result,
     )
     {
+    }
+
+
+    public function __debugInfo(): array
+    {
+        return $this->toArray();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            "event" => $this->event::class,
+            "context" => [$this->context::class],
+            "result" => $this->result,
+        ];
     }
 }

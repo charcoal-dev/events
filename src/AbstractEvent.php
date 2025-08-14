@@ -24,6 +24,8 @@ use Charcoal\Events\Subscriptions\Subscription;
  */
 abstract class AbstractEvent
 {
+    /** @var class-string<EventContextInterface> */
+    public readonly string $primary;
     /** @var array<class-string<EventContextInterface>> $contexts */
     public readonly array $contexts;
     /** @var array<string,Subscription> */
@@ -33,15 +35,20 @@ abstract class AbstractEvent
 
     /**
      * @param string $name
-     * @param string $primary
-     * @param array $contexts
+     * @param array<class-string<EventContextInterface>> $contexts
      */
     public function __construct(
         public readonly string $name,
-        public readonly string $primary,
         array                  $contexts,
     )
     {
+
+        $contexts = array_unique($contexts);
+        if (!$contexts) {
+            throw new \LogicException(ObjectHelper::baseClassName($this) . " expects at least one context");
+        }
+
+        $this->primary = array_shift($contexts);
         if (!$this->primary || !is_subclass_of($this->primary, EventContextInterface::class, true)) {
             throw new \LogicException(ObjectHelper::baseClassName($this) . " expects subclass of " .
                 "EventContextInterface as primary context, got " .
@@ -57,7 +64,7 @@ abstract class AbstractEvent
             }
         }
 
-        $this->contexts = array_unique([...$contexts, $this->primary]);
+        $this->contexts = [$this->primary, ...$contexts];
     }
 
     /**
@@ -108,20 +115,21 @@ abstract class AbstractEvent
     }
 
     /**
-     * @param mixed $nonce
-     * @return string
+     * @return array<string,Subscription>
      */
-    abstract protected function generateSubscriptionId(mixed $nonce): string;
+    public function subscribers(): array
+    {
+        return $this->subscribers;
+    }
 
     /**
-     * @param mixed $nonce
+     * @param string $uniqId
      * @return Subscription
      */
-    public function subscribe(mixed $nonce): Subscription
+    protected function createSubscription(string $uniqId): Subscription
     {
-        $subscriber = $this->generateSubscriptionId($nonce);
-        $subscription = new Subscription($this, $subscriber);
-        $this->subscribers[$subscriber] = $subscription;
+        $subscription = new Subscription($this, $uniqId);
+        $this->subscribers[$uniqId] = $subscription;
         return $subscription;
     }
 
@@ -140,10 +148,10 @@ abstract class AbstractEvent
      */
     public function dispatch(EventContextInterface $context): DispatchReport
     {
-        if (!is_a($context, $this->primary, true)) {
-            throw new \LogicException(ObjectHelper::baseClassName($this) . " expects subclass of " .
-                ObjectHelper::baseClassName(($this->primary) . " as context, got " .
-                    ObjectHelper::baseClassName($context)));
+        if (!$context->getEvent() instanceof $this) {
+            throw new \LogicException("Event does not match subscription");
+        } elseif (!in_array($context::class, $this->contexts)) {
+            throw new \OutOfBoundsException("Event does not support argument context");
         }
 
         if (!$this->subscribers) {
