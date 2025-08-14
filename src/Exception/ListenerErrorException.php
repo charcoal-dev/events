@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Charcoal\Events\Exception;
 
 use Charcoal\Events\Contracts\EventContextInterface;
-use Charcoal\Events\Listener\Subscription;
+use Charcoal\Events\Subscriptions\Subscription;
 
 /**
  * EventListenerErrorException

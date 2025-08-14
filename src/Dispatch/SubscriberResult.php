@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Charcoal\Events\Dispatch;
 
 use Charcoal\Base\Traits\NotSerializableTrait;
-use Charcoal\Events\Listener\Subscription;
+use Charcoal\Events\Subscriptions\Subscription;
 
 /**
  * Class SubscriberResult
