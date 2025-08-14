@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Charcoal\Events\Tests\Fixture\NetworkStatus;
 
 use Charcoal\Events\AbstractEvent;
+use Charcoal\Events\Contracts\EventContextInterface;
+use Charcoal\Events\Dispatch\DispatchReport;
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**
@@ -21,5 +23,10 @@ class NetworkStatusEvent extends AbstractEvent
     {
         return $this->createSubscription("network-status-event-" .
             count($this->subscribers()) . "-" . uniqid());
+    }
+
+    public function dispatch(EventContextInterface $context): DispatchReport
+    {
+        return $this->dispatchEvent($context);
     }
 }

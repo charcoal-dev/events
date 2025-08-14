@@ -123,6 +123,7 @@ abstract class AbstractEvent
     /**
      * @param string $uniqId
      * @return Subscription
+     * @api
      */
     protected function createSubscription(string $uniqId): Subscription
     {
@@ -143,8 +144,9 @@ abstract class AbstractEvent
     /**
      * @param EventContextInterface $context
      * @return DispatchReport
+     * @api
      */
-    public function dispatch(EventContextInterface $context): DispatchReport
+    protected function dispatchEvent(EventContextInterface $context): DispatchReport
     {
         if (!$context->getEvent() instanceof $this) {
             throw new \LogicException("Event does not match subscription");
