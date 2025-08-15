@@ -21,11 +21,12 @@ trait EventStaticScopeTrait
 {
     /**
      * @param S $owner
+     * @param bool $replace
      * @return void
      */
-    public function registerStaticEventStore(EventStoreOwnerInterface $owner): void
+    public function registerStaticEventStore(EventStoreOwnerInterface $owner, bool $replace = false): void
     {
-        StaticEventStore::registerEvent($this, $owner);
+        StaticEventStore::registerEvent($this, $owner, $replace);
     }
 
     /**
