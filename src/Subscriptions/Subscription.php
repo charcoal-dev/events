@@ -106,6 +106,7 @@ class Subscription implements SubscriptionInterface
         }
 
         $this->listeners[$context] = $callback;
+        $this->event->isListening($this, $context);
     }
 
     /**

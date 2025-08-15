@@ -25,10 +25,10 @@ readonly class DispatchReport
         public AbstractEvent         $event,
         public EventContextInterface $context,
         public array                 $result,
+        public int                   $listenerCount
     )
     {
     }
-
 
     public function __debugInfo(): array
     {
@@ -40,6 +40,7 @@ readonly class DispatchReport
         return [
             "event" => $this->event::class,
             "context" => [$this->context::class],
+            "listenerCount" => $this->listenerCount,
             "result" => $this->result,
         ];
     }

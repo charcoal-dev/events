@@ -42,7 +42,6 @@ abstract class AbstractEvent
         array                  $contexts,
     )
     {
-
         $contexts = array_unique($contexts);
         if (!$contexts) {
             throw new \LogicException(ObjectHelper::baseClassName($this) . " expects at least one context");
@@ -142,6 +141,16 @@ abstract class AbstractEvent
     }
 
     /**
+     * @param Subscription $subscriber
+     * @param class-string<EventContextInterface> $eventContext
+     * @return bool
+     */
+    public function isListening(Subscription $subscriber, string $eventContext): bool
+    {
+        return in_array($eventContext, $subscriber->listening());
+    }
+
+    /**
      * @param EventContextInterface $context
      * @return DispatchReport
      * @api
@@ -153,12 +162,14 @@ abstract class AbstractEvent
         }
 
         if (!$this->subscribers) {
-            return new DispatchReport($this, $context, []);
+            return new DispatchReport($this, $context, [], 0);
         }
 
+        $listeners = 0;
         $report = [];
         foreach ($this->subscribers as $subscriber => $subscription) {
             $status = ListenerResult::Uncertain;
+            $listeners++;
 
             try {
                 $result = $subscription->deliver($this, $context);
@@ -167,6 +178,7 @@ abstract class AbstractEvent
                 $status = ListenerResult::Closed;
             } catch (SubscriberNotListeningException) {
                 $status = ListenerResult::NotListening;
+                $listeners--;
             } catch (\Throwable $t) {
                 $status = ListenerResult::Error;
                 $report[$subscriber] = new SubscriberResult($subscription, $status, null, $t);
@@ -176,6 +188,6 @@ abstract class AbstractEvent
             $report[$subscriber] = new SubscriberResult($subscription, $status, $result ?? null);
         }
 
-        return new DispatchReport($this, $context, $report);
+        return new DispatchReport($this, $context, $report, $listeners);
     }
 }
