@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Charcoal\Events\Tests\Fixture\NetworkStatus;
 
 use Charcoal\Events\AbstractEvent;
+use Charcoal\Events\BehaviorEvent;
 use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Dispatch\DispatchReport;
 use Charcoal\Events\Subscriptions\Subscription;
@@ -17,7 +18,7 @@ use Charcoal\Events\Subscriptions\Subscription;
  * Class NetworkStatusEvent
  * @package Charcoal\Events\Tests\Fixture
  */
-class NetworkStatusEvent extends AbstractEvent
+class NetworkStatusEvent extends BehaviorEvent
 {
     public function subscribe(): Subscription
     {
