@@ -23,12 +23,17 @@ class StaticEventStore
      * @template T of AbstractEvent
      * @param T $event
      * @param EventStoreOwnerInterface $store
+     * @param bool $replace
      */
-    public static function registerEvent(AbstractEvent $event, EventStoreOwnerInterface $store): void
+    public static function registerEvent(
+        AbstractEvent            $event,
+        EventStoreOwnerInterface $store,
+        bool                     $replace = false
+    ): void
     {
         $classname = static::normalizeEventClassname($event::class);
         $contextKey = static::normalizeContextKey($store->eventsUniqueContextKey());
-        if (isset(static::$events[$classname][$contextKey])) {
+        if (!$replace && isset(static::$events[$classname][$contextKey])) {
             throw new \LogicException("Event $classname for this context already registered");
         }
 
