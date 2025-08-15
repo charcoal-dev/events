@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Charcoal\Events\Tests;
 
 use Charcoal\Events\Dispatch\ListenerResult;
-use Charcoal\Events\Tests\Fixture\NetworkStatus\BaseNetworkStatusEvent;
+use Charcoal\Events\Tests\Fixture\NetworkStatus\NetworkStatusEventContext;
 use Charcoal\Events\Tests\Fixture\NetworkStatus\NetworkStatusEvent;
 use Charcoal\Events\Tests\Fixture\NetworkStatus\ServiceStatusUpdate;
 use PHPUnit\Framework\TestCase;
@@ -16,16 +16,15 @@ final class NetworkStatusEventTest extends TestCase
         return new NetworkStatusEvent(
             'network-status',
             [
-                BaseNetworkStatusEvent::class,   // primary
+                NetworkStatusEventContext::class,   // primary
                 ServiceStatusUpdate::class,      // allowed context
             ]
         );
     }
 
-    private function newContext(NetworkStatusEvent $event, bool $serviceStatus = true): ServiceStatusUpdate
+    private function newContext(bool $serviceStatus = true): ServiceStatusUpdate
     {
         return new ServiceStatusUpdate(
-            $event,
             $serviceStatus,
             new \DateTimeImmutable('now')
         );
@@ -45,7 +44,7 @@ final class NetworkStatusEventTest extends TestCase
             return 'delivered';
         });
 
-        $report = $event->dispatch($this->newContext($event, true));
+        $report = $event->dispatch($this->newContext(true));
 
         $this->assertSame($event, $report->event);
         $this->assertInstanceOf(ServiceStatusUpdate::class, $report->context);
@@ -62,7 +61,7 @@ final class NetworkStatusEventTest extends TestCase
         $subscription = $event->subscribe();
         $this->assertNotEmpty($subscription->id());
 
-        $report = $event->dispatch($this->newContext($event));
+        $report = $event->dispatch($this->newContext());
 
         $this->assertCount(1, $report->result);
         $result = current($report->result);
@@ -79,7 +78,7 @@ final class NetworkStatusEventTest extends TestCase
         $subscription->disconnect($event);
         $this->assertSame(1, $event->count());
 
-        $report = $event->dispatch($this->newContext($event));
+        $report = $event->dispatch($this->newContext());
 
         $this->assertCount(1, $report->result);
         $result = current($report->result);
@@ -98,7 +97,7 @@ final class NetworkStatusEventTest extends TestCase
         $subscription->unsubscribe();
         $this->assertSame(0, $event->count());
 
-        $report = $event->dispatch($this->newContext($event));
+        $report = $event->dispatch($this->newContext());
         $this->assertCount(0, $report->result);
     }
 
@@ -122,7 +121,7 @@ final class NetworkStatusEventTest extends TestCase
 
         // Dispatch should reach the active subscription
         $active->listen(ServiceStatusUpdate::class, fn() => 'ok');
-        $report = $event->dispatch($this->newContext($event));
+        $report = $event->dispatch($this->newContext());
         $this->assertCount(1, $report->result);
 
         $result = current($report->result);
@@ -148,7 +147,7 @@ final class NetworkStatusEventTest extends TestCase
         $this->assertSame(1, $restored->count());
 
         // After wakeup, listeners are discarded, so dispatch should be NotListening
-        $report = $restored->dispatch($this->newContext($restored));
+        $report = $restored->dispatch($this->newContext());
         $this->assertCount(1, $report->result);
 
         $result = current($report->result);

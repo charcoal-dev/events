@@ -148,9 +148,7 @@ abstract class AbstractEvent
      */
     protected function dispatchEvent(EventContextInterface $context): DispatchReport
     {
-        if (!$context->getEvent() instanceof $this) {
-            throw new \LogicException("Event does not match subscription");
-        } elseif (!in_array($context::class, $this->contexts)) {
+        if (!in_array($context::class, $this->contexts)) {
             throw new \OutOfBoundsException("Event does not support argument context");
         }
 
