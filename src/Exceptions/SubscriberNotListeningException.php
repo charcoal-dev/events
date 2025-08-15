@@ -6,8 +6,12 @@
 
 declare(strict_types=1);
 
-namespace Charcoal\Events\Exception;
+namespace Charcoal\Events\Exceptions;
 
+/**
+ * Class SubscriberNotListeningException
+ * @package Charcoal\Events\Exceptions
+ */
 class SubscriberNotListeningException extends \Exception
 {
 }

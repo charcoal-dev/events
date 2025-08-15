@@ -32,7 +32,7 @@ final class NetworkStatusEventTest extends TestCase
 
     /**
      * @return void
-     * @throws \Charcoal\Events\Exception\SubscriptionClosedException
+     * @throws \Charcoal\Events\Exceptions\SubscriptionClosedException
      */
     public function test_subscribes_and_dispatches_successfully(): void
     {
@@ -103,7 +103,7 @@ final class NetworkStatusEventTest extends TestCase
 
     /**
      * @return void
-     * @throws \Charcoal\Events\Exception\SubscriptionClosedException
+     * @throws \Charcoal\Events\Exceptions\SubscriptionClosedException
      */
     public function test_purge_inactive_removes_only_inactive(): void
     {
@@ -131,7 +131,7 @@ final class NetworkStatusEventTest extends TestCase
 
     /**
      * @return void
-     * @throws \Charcoal\Events\Exception\SubscriptionClosedException
+     * @throws \Charcoal\Events\Exceptions\SubscriptionClosedException
      */
     public function test_serialization_persists_subscriptions_but_drops_listeners(): void
     {

@@ -6,13 +6,13 @@
 
 declare(strict_types=1);
 
-namespace Charcoal\Events\Exception;
+namespace Charcoal\Events\Exceptions;
 
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**
  * Class SubscriptionClosedException
- * @package Charcoal\Events\Exception
+ * @package Charcoal\Events\Exceptions
  */
 class SubscriptionClosedException extends \Exception
 {

@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Charcoal\Events\Exception;
+namespace Charcoal\Events\Exceptions;
 
 use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**
- * EventListenerErrorException
- * Represents an exception that encapsulates an error occurring in an event listener.
+ * Class ListenerErrorException
+ * @package Charcoal\Events\Exceptions
  */
 class ListenerErrorException extends \Exception
 {

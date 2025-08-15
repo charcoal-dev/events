@@ -14,8 +14,8 @@ use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Dispatch\DispatchReport;
 use Charcoal\Events\Dispatch\ListenerResult;
 use Charcoal\Events\Dispatch\SubscriberResult;
-use Charcoal\Events\Exception\SubscriberNotListeningException;
-use Charcoal\Events\Exception\SubscriptionClosedException;
+use Charcoal\Events\Exceptions\SubscriberNotListeningException;
+use Charcoal\Events\Exceptions\SubscriptionClosedException;
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**

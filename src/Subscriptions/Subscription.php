@@ -12,9 +12,9 @@ use Charcoal\Base\Traits\NotCloneableTrait;
 use Charcoal\Events\AbstractEvent;
 use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Contracts\SubscriptionInterface;
-use Charcoal\Events\Exception\ListenerErrorException;
-use Charcoal\Events\Exception\SubscriberNotListeningException;
-use Charcoal\Events\Exception\SubscriptionClosedException;
+use Charcoal\Events\Exceptions\ListenerErrorException;
+use Charcoal\Events\Exceptions\SubscriberNotListeningException;
+use Charcoal\Events\Exceptions\SubscriptionClosedException;
 
 /**
  * Class Subscription
