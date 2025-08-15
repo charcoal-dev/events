@@ -7,4 +7,4 @@ developers to experience semblance of asynchronous programming, even if it's not
 For detailed information, guidance, and setup instructions regarding this library, please refer to our official
 documentation website:
 
-[https://charcoal.dev/docs/events](https://charcoal.dev/docs/events)
+[https://charcoal.dev/libs/events](https://charcoal.dev/libs/events)
