@@ -16,6 +16,7 @@ use Charcoal\Events\Dispatch\ListenerResult;
 use Charcoal\Events\Dispatch\SubscriberResult;
 use Charcoal\Events\Exceptions\SubscriberNotListeningException;
 use Charcoal\Events\Exceptions\SubscriptionClosedException;
+use Charcoal\Events\Stats\EventStats;
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**
@@ -30,6 +31,8 @@ abstract class AbstractEvent
     public readonly array $contexts;
     /** @var array<string,Subscription> */
     private array $subscribers = [];
+    /** @var EventStats */
+    private EventStats $stats;
 
     use ControlledSerializableTrait;
 
@@ -39,7 +42,7 @@ abstract class AbstractEvent
      */
     public function __construct(
         public readonly string $name,
-        array                  $contexts,
+        array                  $contexts
     )
     {
         $contexts = array_unique($contexts);
@@ -64,6 +67,7 @@ abstract class AbstractEvent
         }
 
         $this->contexts = [$this->primary, ...$contexts];
+        $this->enableMonitoring();
     }
 
     /**
@@ -76,7 +80,13 @@ abstract class AbstractEvent
             "primary" => $this->primary,
             "contexts" => $this->contexts,
             "subscribers" => $this->subscribers,
+            "stats" => null,
         ];
+    }
+
+    public function __debugInfo(): array
+    {
+        return [static::class, $this->primary];
     }
 
     /**
@@ -89,6 +99,7 @@ abstract class AbstractEvent
         $this->primary = $data["primary"];
         $this->contexts = $data["contexts"];
         $this->subscribers = $data["subscribers"];
+        $this->enableMonitoring();
     }
 
     /**
@@ -147,7 +158,15 @@ abstract class AbstractEvent
      */
     public function isListening(Subscription $subscriber, string $eventContext): bool
     {
-        return in_array($eventContext, $subscriber->listening());
+        if (in_array($eventContext, $subscriber->listening())) {
+            if (!in_array($subscriber->id, $this->stats->history[$eventContext])) {
+                $this->stats->history[$eventContext][] = $subscriber->id;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -161,6 +180,7 @@ abstract class AbstractEvent
             throw new \OutOfBoundsException("Event does not support argument context");
         }
 
+        $this->stats->emits[$context::class]++;
         if (!$this->subscribers) {
             return new DispatchReport($this, $context, [], 0);
         }
@@ -189,5 +209,43 @@ abstract class AbstractEvent
         }
 
         return new DispatchReport($this, $context, $report, $listeners);
+    }
+
+    /**
+     * Enables monitoring by initializing event statistics, including emitted counts,
+     * history for each context, and the current state of events.
+     */
+    public function enableMonitoring(): void
+    {
+        $this->stats = new EventStats();
+        $this->stats->emits = array_fill_keys($this->contexts, 0);
+        $this->stats->history = array_fill_keys($this->contexts, []);
+        $this->stats->current = [];
+    }
+
+    /**
+     * Inspects and returns the event statistics, optionally converting
+     * class names in the context keys to their base names.
+     */
+    public function inspect(bool $basename = true): EventStats
+    {
+        $inspect = new EventStats();
+        $inspect->emits = $this->stats->emits;
+        $inspect->history = $this->stats->history;
+        $inspect->current = array_fill_keys($this->contexts, []);
+        foreach ($this->subscribers as $subscriber) {
+            foreach ($subscriber->listening() as $context) {
+                $inspect->current[$context][] = $subscriber->id;
+            }
+        }
+
+        if ($basename) {
+            $contexts = array_map(fn($k) => ObjectHelper::baseClassName($k), array_keys($inspect->emits));
+            $inspect->emits = array_combine($contexts, array_values($inspect->emits));
+            $inspect->history = array_combine($contexts, array_values($inspect->history));
+            $inspect->current = array_combine($contexts, array_values($inspect->current));
+        }
+
+        return $inspect;
     }
 }
