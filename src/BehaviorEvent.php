@@ -54,4 +54,14 @@ abstract class BehaviorEvent extends AbstractEvent
 
         return $isListening;
     }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        parent::__unserialize($data);
+        $this->queue = [];
+    }
 }
