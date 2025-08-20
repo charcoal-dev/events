@@ -90,15 +90,28 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * @param class-string<EventContextInterface> $context
-     * @param \Closure $callback
-     * @return void
+     * @return $this
      * @throws SubscriptionClosedException
+     * @api
      */
-    public function listen(string $context, \Closure $callback): void
+    public function ping(): static
     {
         if (!$this->status || $this->disconnected) {
             throw new SubscriptionClosedException($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param class-string<EventContextInterface> $context
+     * @param \Closure $callback
+     * @return boolean
+     */
+    public function listen(string $context, \Closure $callback): bool
+    {
+        if (!$this->status || $this->disconnected) {
+            return false;
         }
 
         if (!in_array($context, $this->event->contexts)) {
@@ -107,6 +120,7 @@ class Subscription implements SubscriptionInterface
 
         $this->listeners[$context] = $callback;
         $this->event->isListening($this, $context);
+        return true;
     }
 
     /**

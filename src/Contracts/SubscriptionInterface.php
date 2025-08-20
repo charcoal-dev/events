@@ -28,9 +28,9 @@ interface SubscriptionInterface
     /**
      * @param class-string<EventContextInterface> $context
      * @param \Closure $callback
-     * @return void
+     * @return bool
      */
-    public function listen(string $context, \Closure $callback): void;
+    public function listen(string $context, \Closure $callback): bool;
 
     public function deliver(AbstractEvent $event, EventContextInterface $context): mixed;
 
