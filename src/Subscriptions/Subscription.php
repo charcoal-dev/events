@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Charcoal\Events\Subscriptions;
 
-use Charcoal\Base\Traits\NotCloneableTrait;
+use Charcoal\Base\Objects\Traits\NotCloneableTrait;
 use Charcoal\Events\AbstractEvent;
 use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Contracts\SubscriptionInterface;

@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Charcoal\Events\Contracts;
 
 /**
- * Interface BehaviourContextEnablerInterface
- * @package Charcoal\Events\Contracts
+ * This interface represents a contract that extends the EventContextInterface,
+ * allowing for the enabling or manipulation of behavior contexts.
  */
 interface BehaviourContextEnablerInterface extends EventContextInterface
 {

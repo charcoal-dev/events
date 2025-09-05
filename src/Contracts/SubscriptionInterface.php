@@ -11,8 +11,9 @@ namespace Charcoal\Events\Contracts;
 use Charcoal\Events\AbstractEvent;
 
 /**
- * Interface SubscriptionInterface
- * @package Charcoal\Events\Contracts
+ * Represents a subscription contract for managing event-based interactions,
+ * allowing for the creation, delivery, and management of event listeners
+ * and their associated contexts.
  */
 interface SubscriptionInterface
 {

@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Charcoal\Events\Dispatch;
 
-use Charcoal\Base\Traits\NotSerializableTrait;
+use Charcoal\Base\Objects\Traits\NotSerializableTrait;
 use Charcoal\Events\Subscriptions\Subscription;
 
 /**

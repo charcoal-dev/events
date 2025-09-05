@@ -8,13 +8,14 @@ declare(strict_types=1);
 
 namespace Charcoal\Events\Dispatch;
 
-use Charcoal\Base\Traits\NotSerializableTrait;
+use Charcoal\Base\Objects\Traits\NotSerializableTrait;
 use Charcoal\Events\AbstractEvent;
 use Charcoal\Events\Contracts\EventContextInterface;
 
 /**
- * Class DispatchReport
- * @package Charcoal\Events\Event
+ * This class is immutable and provides detailed information about the event that was dispatched,
+ * the context in which it was executed, the results produced by the listeners,
+ * and the count of listeners involved in handling the event.
  * @var array<string,SubscriberResult> $result
  */
 readonly class DispatchReport

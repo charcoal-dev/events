@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Charcoal\Events\Contracts;
 
 /**
- * Interface EventStoreOwnerInterface
- * @package Charcoal\Events\Contracts
+ * Interface for defining an owner of an event store.
+ * Provides a method to retrieve a unique key representing the context of events.
  */
 interface EventStoreOwnerInterface
 {
