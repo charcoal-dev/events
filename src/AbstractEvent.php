@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Charcoal\Events;
 
-use Charcoal\Base\Support\Helpers\ObjectHelper;
-use Charcoal\Base\Traits\ControlledSerializableTrait;
+use Charcoal\Base\Objects\ObjectHelper;
+use Charcoal\Base\Objects\Traits\ControlledSerializableTrait;
 use Charcoal\Events\Contracts\EventContextInterface;
 use Charcoal\Events\Dispatch\DispatchReport;
 use Charcoal\Events\Dispatch\ListenerResult;
@@ -21,7 +21,6 @@ use Charcoal\Events\Subscriptions\Subscription;
 
 /**
  * Represents an event that allows attaching and managing listeners.
- * @property class-string<EventContextInterface> $primary
  */
 abstract class AbstractEvent
 {

@@ -12,8 +12,7 @@ use Charcoal\Events\AbstractEvent;
 use Charcoal\Events\Contracts\EventStoreOwnerInterface;
 
 /**
- * Class StaticEventBook
- * @package Charcoal\Events\Support
+ * A static event store to manage the lifecycle of event instances associated with specific contexts.
  */
 class StaticEventStore
 {
@@ -61,6 +60,7 @@ class StaticEventStore
      * @param class-string<T> $eventClass
      * @param EventStoreOwnerInterface|null $store
      * @return void
+     * @api
      */
     public static function unregisterEvent(string $eventClass, ?EventStoreOwnerInterface $store): void
     {
